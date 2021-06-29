@@ -7,8 +7,8 @@ const web3 = new Web3(new Web3.providers.HttpProvider(url));
 const {pool, Client} = require("pg");
 const client = new Client({
     user: "postgres",
-    host: "localhost",
-    password: "Naveenvemy@99",
+    host: "muniyama.cr1fxku2h1oq.us-east-2.rds.amazonaws.com",
+    password: "20041999",
     port: 5432
 });
 client.connect();
@@ -19,7 +19,12 @@ latest_block_num = parseInt(latest_block_num);
 var eventdata = require("./event_data.json")
 
 var updateTable = function(body, table, inputs){
-    var json = JSON.parse(body);
+    try{
+        var json = JSON.parse(body);
+    }catch(e){
+        return console.error(e);
+    }
+    
     if(json["data"]==null){
         console.log("data is null");
         return;
