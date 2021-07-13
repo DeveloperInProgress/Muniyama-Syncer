@@ -67,7 +67,7 @@ var updateTable = function(body, table, inputs){
 
 function update_data(start_block,end_block){
     var url1 = "https://api.covalenthq.com/v1/30/events/topics/";
-    var params = "/?starting-block="+start_block+"&ending-block="+end_block+"&key=ckey_233d55702d264a1f948798ab5f7";
+    var params = "/?starting-block="+start_block+"&ending-block="+end_block+"&key=**masked**";
     eventdata.forEach((event)=>{
         var topic0 = event["topic0"];
         var inputs = event["inputs"];
@@ -106,7 +106,7 @@ function writeLatestBlockNum(){
 }
 
 async function checkCovalent(blockNum){
-    var url1 ="https://api.covalenthq.com/v1/30/block_v2/"+blockNum+"/?key=ckey_233d55702d264a1f948798ab5f7";
+    var url1 ="https://api.covalenthq.com/v1/30/block_v2/"+blockNum+"/?key=**masked**";
     var found = false;
     var req = await https.get(url1,(res)=>{
         res.setEncoding("utf8");
