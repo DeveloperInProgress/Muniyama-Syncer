@@ -90,19 +90,25 @@ function update_data(start_block,end_block){
     });
 }
 
-function writeLatestBlockNum(){
-    var buffer = new Buffer.from(""+latest_block_num);
-    fs.open("./latest_block_num.txt",'w',function(err,fd){
-        if(err){
-            console.log("can't open latest_block_num.txt");
-        } else {
-            fs.write(fd,buffer,0,buffer.length,null,function(err,written){
-                if(err){
-                    console.log("can't write to latest_block_num.txt");
-                } 
-            })
-        }
-    })
+async function checkCovalent(blockNum){
+    var url1 ="https://api.covalenthq.com/v1/30/block_v2/"+blockNum+"/?key=ckey_233d55702d264a1f948798ab5f7";
+    var found = false;
+    var req = await https.get(url1,(res)=>{
+        res.setEncoding("utf8");
+        var body="";
+        res.on("data",(chunk)=>{
+            body += chunk;
+        })
+        res.on("end",()=>{
+            try{
+                var json = JSON.parse(body);
+            }catch(e){
+                return console.error(e);
+            };
+            if(json["data"]["items"].length>0) found=true;
+        });
+    });
+    req.on("error",(e)=>{console.error("error:$(e.message")});
 }
 
 async function listener(){
@@ -111,10 +117,10 @@ async function listener(){
     } catch (err){
         return listener();
     }
-    
     console.log(current_block_num);
     if(current_block_num>latest_block_num){
-        update_data(latest_block_num+1,current_block_num);
+        while(checkCovalent(current_block_num)==false);
+        update_data(latest_block_num+1,current_block_num+1);
         latest_block_num=current_block_num;
         writeLatestBlockNum();
     }
