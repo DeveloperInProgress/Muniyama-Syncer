@@ -90,6 +90,21 @@ function update_data(start_block,end_block){
     });
 }
 
+function writeLatestBlockNum(){
+    var buffer = new Buffer.from(""+latest_block_num);
+    fs.open("./latest_block_num.txt",'w',function(err,fd){
+        if(err){
+            console.log("can't open latest_block_num.txt");
+        } else {
+            fs.write(fd,buffer,0,buffer.length,null,function(err,written){
+                if(err){
+                    console.log("can't write to latest_block_num.txt");
+                } 
+            })
+        }
+    })
+}
+
 async function checkCovalent(blockNum){
     var url1 ="https://api.covalenthq.com/v1/30/block_v2/"+blockNum+"/?key=ckey_233d55702d264a1f948798ab5f7";
     var found = false;
